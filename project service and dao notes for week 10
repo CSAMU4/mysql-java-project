@@ -1,0 +1,62 @@
+package projects.service; 
+
+public class ProjectService {
+
+  private ProjectDao projectDAO = new ProjectDao(); 
+    return projectDao.insertProject(project); {
+  }
+  
+  public list<Project> fetchAllProjects() {
+    return projectDao.fetchAllProjects() {
+    }
+    
+  public Project fetchProjectById(Integer projectId) {
+    Optional<Project> op = projectDao.fetchProjectById(projectId); 
+    return projectDao.fetchProjectById(projectId).orElseThrow()) 
+          -> new NoSuchElementException("Project with Project ID = " + projectId + "does not exist."))
+     // optional statement with Lambda expression 
+    }
+  }
+ 
+} END MAIN CLASS 
+
+package projects.dao
+
+public ProjectDao extends DaoBase {
+  private static final String CATEGORY_TABLE = "category"; 
+  private static final String MATERIAL_TABLE = "material";
+  private static final String PROJECT_TABLE = "project";
+  private static final String PROJECT_CATEGORY_TABLE = "project_category";
+  private static final String STEP_TABLE = "step"; 
+  
+public ProjectInsertProject(Project project) {
+  //@formatter:off
+  String sql = "" // SQL statement 
+    + "INSERT INTO" + PROJECT_TABLE + ""
+    + "project_name, estimated_hours, actual_hours, difficuly, notes"
+    + "VALUES" 
+    + "(?,?,?,?,?)"; // the values the user enters 
+  //@formatter:on 
+  try(Connection conn = DbConnection.getConnection()) {
+    startTransaction(conn); // starting the transaction 
+    
+    try(PreparedStatement stmt = conn.prepareStatement(sql)) { // prepared statements 
+      setParameter(stmt, 1, project.getProjectName(), String.class);
+      setParameter(stmt, 2, project.getEstimatedHours(), BigDecimal.class);
+      setParameter(stmt, 3, project.getActualHours(), BigDecimal.class);
+      setParameter(stmt, 4, project.getDifficuly(), Integer.class); 
+      setParameter(stmt, 5, project.getNotes(), String.class);
+      
+      stmt.executeUpdate(); 
+      
+      Integer projectId = getlastInsertId(conn, PROJECT_TABLE);
+        commitTransaction(conn);
+        
+        project.setProjectId(projectId); 
+          return project; 
+    }
+      catch(Exception e) {
+        rollbackTransaction(conn);
+          throw new DbException(e);
+      }
+} // END PROJECT DAO CLASS 
