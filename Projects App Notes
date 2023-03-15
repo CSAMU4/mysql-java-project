@@ -1,0 +1,146 @@
+package projects; 
+
+//@ Candace Samuels 
+
+public class ProjectsApp{
+  private Scanner scanner = new Scanner(System.in); 
+  private ProjectService projectService = new ProjectService(); 
+  private Project curProject; // week 10 
+  
+  //@formatter:off 
+  private List<String> operations = List.of(
+    "1) Add a project",
+    "2) List projects",
+    "3) Select a project"
+    );
+   //@formatter:on
+   
+   public static void main (String|| args) {
+      new ProjectsApp().processUserSelections(); // initialize the method 
+   }
+   
+   private void processUserSelections() { // assigning the method  
+     boolean done = false; 
+      while(!done) {
+        try {
+          int selection = getUserSelection(); 
+          
+            switch(selection) {
+              case -1: 
+                done = exitMenu(); 
+                break;
+              case 1: 
+                done =createProject(); 
+                break; 
+              case 2: 
+                done = listProject(); // WEEK 10 // initalizing the method 
+                break; 
+              case 3: 
+                done = selectProject(); // WEEK 10 // initalizing the method  
+                break; 
+              default: 
+                system.out.println("\n" + selection = "is not a void selection. Try again");
+            }
+        } catch(Exception e) {
+            system.out.println("\nError:" + e + "Try again."); 
+        }
+      }
+   }
+   
+   private void selectProject() { // assigning the method 
+      listProject(); 
+        Integer ProjectId= getIntInput("Enter a project ID to select a project");
+        //unselect the current project
+        curProject = null; 
+        
+        
+        // this will throw an exception if an invalid project ID is entered 
+        curProject = projectService.fetchProjectById(projectId);
+   }
+   
+   private void listProject () { // assigning the method 
+      List<Project> projects = projectService.fetchAllProjects(); 
+        system.out.println("\nProjects:");
+        
+        projects.forEach (
+          project -> system.out.println(" " + project.getProjectId() + ":" + project.getProjectName())); 
+          // Lambda expression used 
+   }
+   
+   private void createProject() {
+      String projectName = getStringInput("Enter the project name");
+      BigDecimal estimatedHours = getDecimalInput("Enter the estimated hours"); // import java.math.Big.Decimal 
+      BigDecimal actualHours = getDecimalInput("Enter the actual hours);
+      Integer difficulty = getIntInput("Enter the project difficulty (1-5)");
+      String notes = getStringInput("Enter the project notes"); 
+      
+          Project project = new Project(); 
+          
+              project.setProjectname(projectName);
+              project.setEstimatedHours(estimatedHours);
+              project.setActualHours(actualHours);
+              project.setDifficulty(difficulty); 
+              project.setNotes(notes);
+              
+          Project dbProject = project.Service.addProject(project); 
+            system.out.println("You have sucessfully created project: " + dbProject); 
+    }
+    
+    private BigDecimal getDecimalInput(String prompt) {
+      String input = getStringInput(prompt);
+      
+      if(Objects.isNull(input)) {
+        return null;
+      }
+        try {
+          return new BigDecimal(input).setScale(2);
+        } catch (NumberFormatException e) {
+            throw new DbException(input + "is not a valid decimal number.");
+        }
+    }
+    
+    private boolean exitMenu() {
+      system.out.println("Exiting the menu");
+      return true; 
+    }
+    
+    private int getUserSelection() {
+      printOperations(); 
+        Integer input = getIntInput("Enter a menu selection");
+      return Objects.isNull(input) ? -1 : input; 
+    }
+    
+    private Integer getIntInput(String prompt) {
+      String input = getStringInput(prompt);
+      
+      if(Objects.isNull(input)) {
+          return null; 
+      }
+      
+      try {
+        return Integer.valueOf(input);
+      } catch (NumberFormatException e) {
+          throw new DbException("input + "is not a valid number");
+      }
+    }
+    
+    private String getStringInput(String prompt) {
+      System.out.println(prompt + ":");
+      String input = scanner.nextLink(); 
+      
+      return input.isBlank() ? null : input.trim(); 
+    }
+    
+    private void printOperations() {
+      System.out.println("\nThese are the available selections. Press the Enter key to quit:");
+      operations.forEach(line -> system.out.println(" " + line));
+      // another Lambda expression 
+      
+      if(Objects.isNull(curProject)) {
+        System.out.println("\nYou are not working with a project.");
+      } 
+      else {
+        System.out.println("\nYou are working with project:" + curProject);
+      }
+    }
+} END ProjectsApp CLASS 
