@@ -1,2 +1,3 @@
-# Week-9-ProjectsApp
-Write code to create a menu driven application. This demonstration will use the INSERT statement (the CREATE part of CRUD). 
+# mysql-java-project
+
+This was a MySQL project at Promineo Tech. This project assignment was to create a small relational database for a DIY Projects schema. 
