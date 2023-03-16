@@ -17,10 +17,16 @@ public class ProjectService {
      // optional statement with Lambda expression 
      
   ** WEEK 11 START **
-  public void modifyProjectDetails(Project project) { // method from projectsApp, Eclipse will create 
+  public void modifyProjectDetails(Project project) { // method from ProjectsApp.java, Eclipse will create 
     if(!projectDao.modifyProjectDetails(project)) {
       throw new DbException("Project with ID=" + project.getProjectId() + " does not exist.");
     }
+    
+  public void deleteProject(Integer projectId) { // method from ProjectsApp.java
+    if(!projectDao.deleteProject(projectId)) {
+      throw new DbException("Project with ID=" + projectId + "does not exist");
+    }
+  }
     
   } ** WEEK 11 END ** 
     }
@@ -70,6 +76,30 @@ public ProjectInsertProject(Project project) {
       }
       
  ** WEEK 11 ** 
+ public boolean deleteProject(projectId) { // method from ProjectService.java
+  String sql = "DELETE FROM" + PROJECT_TABLE + " WHERE project_id = ?"; 
+  try(Connection conn = DbConnection.getConnection()) {
+       startTransaction(conn);  
+    
+    try(PreparedStatement stmt = conn.prepareStatement(sql)) { 
+      setParameter(stmt, 1, project.getProjectId(), Integer.class); 
+      
+      boolean deleted = stmt.executeUpdate() == 1; 
+      commitTransaction(conn);
+      
+      return deleted; 
+      
+      }
+      catch(Exception e) {
+        rollback Transaction(conn); 
+          throw new DbException(e); 
+      }
+      catch(SQLException e) {
+        throw new DbException(e); 
+      }
+ 
+ }
+ 
  public boolean modifyProjectDetails(Project project) { //method from ProjectService.java 
     //@formatter:off
       String sql = "" 
@@ -82,7 +112,7 @@ public ProjectInsertProject(Project project) {
         + "WHERE project_id = ?";
      //@formatter:on
      
-     try(Connection conn = DbConnection.getConnection()) {
+    try(Connection conn = DbConnection.getConnection()) {
        startTransaction(conn);  
     
     try(PreparedStatement stmt = conn.prepareStatement(sql)) { 
@@ -97,8 +127,14 @@ public ProjectInsertProject(Project project) {
       commitTransaction(conn);
       
       return modifed; // test here 
-   
-     
- 
+      
+      }
+      catch(Exception e) {
+        rollback Transaction(conn); 
+          throw new DbException(e); 
+      }
+      catch(SQLException e) {
+        throw new DbException(e); 
+      }
  }
 } // END PROJECT DAO CLASS 
