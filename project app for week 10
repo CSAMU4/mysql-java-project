@@ -11,7 +11,8 @@ public class ProjectsApp{
   private List<String> operations = List.of(
     "1) Add a project",
     "2) List projects",
-    "3) Select a project"
+    "3) Select a project", 
+    "4) Update project details" // week 11 
     );
    //@formatter:on
    
@@ -38,6 +39,9 @@ public class ProjectsApp{
               case 3: 
                 done = selectProject(); // WEEK 10 // initalizing the method  
                 break; 
+              case 4: 
+                done = updateProjectDetails(); // week 11 call method 
+                break;
               default: 
                 system.out.println("\n" + selection = "is not a void selection. Try again");
             }
@@ -46,6 +50,33 @@ public class ProjectsApp{
         }
       }
    }
+   
+   private void updateProjectDetails() { // week 11 method 
+    if(Objects.isNull(curProject)) {
+      System.out.println("\nPlease select a project."); 
+        return; 
+   }
+   // week 11
+      String projectName = getStringInput("Enter the project name [" + curProject.getProjectName() + "]");
+      BigDecimal estimatedHours = getDecimalInput("Enter the estimated hours[" + curProject.getEstimatedHours() + "]");
+      BigDecimal actualHours = getDecimalInput("Enter the actual hours[" + curProject.getActualHours() + "]");
+      Integer difficuly = getIntInput("Enter the project difficulty[" + curProject.getDifficuly() + "]");
+      String notes = getStringInput("Enter the project notes[" + curProject.getNotes() + "]"); 
+   
+   Project project = new Project(); // week 11
+      project.setProjectId(curProject.getProjectId());
+      project.setProjectName(Objects.isNull(projectName) ? curProject.getProjectName() : projectName); 
+      project.setEstimatedHours(Objects.isNull(estimatedHours) ? curProject.getEstimatedHours() : estimatedHours);
+      project.setActualHours(Objects.isNull(actualHours) ? curProject.getActualHours() : actualHours);
+      project.setDifficuly(Objects.isNull(difficuly) ? curProject.getDifficuly() : difficuly); 
+      project.setNotes(Objects.isNull(notes) ? curProject.getNotes() : notes);
+      
+   projectService.modifyProjectDetails(project); // week 11 call method in ProjectService.java 
+   
+   curProject = projectService.fetchProjectById(curProject.getProjectId()); 
+
+   }
+   
    
    private void selectProject() { // assigning the method 
       listProject(); 
