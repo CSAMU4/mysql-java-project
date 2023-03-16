@@ -12,7 +12,8 @@ public class ProjectsApp{
     "1) Add a project",
     "2) List projects",
     "3) Select a project", 
-    "4) Update project details" // week 11 
+    "4) Update project details", // week 11 
+    "5) Delete a project"
     );
    //@formatter:on
    
@@ -42,6 +43,9 @@ public class ProjectsApp{
               case 4: 
                 done = updateProjectDetails(); // week 11 call method 
                 break;
+              case 5: 
+                done = deleteProject(); // week 11 call method 
+        
               default: 
                 system.out.println("\n" + selection = "is not a void selection. Try again");
             }
@@ -49,6 +53,18 @@ public class ProjectsApp{
             system.out.println("\nError:" + e + "Try again."); 
         }
       }
+   }
+   ** WEEK 11 START **
+   private void deleteProject() { // week 11 method 
+    listProjects(); 
+    
+    Integer projectId = getIntInput("Enter the ID of the project to delete.");
+      projectService.deleteProject(ProjectId); 
+        System.out.println("Project " + projectId + " was deleted successfully.);
+        
+     if(Objects.nonNull(curProject) && curProject.getProjectId().equals(projectId)) {
+      curProject = null; 
+     }
    }
    
    private void updateProjectDetails() { // week 11 method 
@@ -76,7 +92,7 @@ public class ProjectsApp{
    curProject = projectService.fetchProjectById(curProject.getProjectId()); 
 
    }
-   
+   **WEEK 11 END**
    
    private void selectProject() { // assigning the method 
       listProject(); 
