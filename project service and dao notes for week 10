@@ -15,6 +15,14 @@ public class ProjectService {
     return projectDao.fetchProjectById(projectId).orElseThrow()) 
           -> new NoSuchElementException("Project with Project ID = " + projectId + "does not exist."))
      // optional statement with Lambda expression 
+     
+  ** WEEK 11 START **
+  public void modifyProjectDetails(Project project) { // method from projectsApp, Eclipse will create 
+    if(!projectDao.modifyProjectDetails(project)) {
+      throw new DbException("Project with ID=" + project.getProjectId() + " does not exist.");
+    }
+    
+  } ** WEEK 11 END ** 
     }
   }
  
@@ -37,6 +45,7 @@ public ProjectInsertProject(Project project) {
     + "VALUES" 
     + "(?,?,?,?,?)"; // the values the user enters 
   //@formatter:on 
+  
   try(Connection conn = DbConnection.getConnection()) {
     startTransaction(conn); // starting the transaction 
     
@@ -59,4 +68,37 @@ public ProjectInsertProject(Project project) {
         rollbackTransaction(conn);
           throw new DbException(e);
       }
+      
+ ** WEEK 11 ** 
+ public boolean modifyProjectDetails(Project project) { //method from ProjectService.java 
+    //@formatter:off
+      String sql = "" 
+        + "UPDATE " + PROJECT_TABLE + " SET "
+        + "project_name = ?,"
+        + "estimated_hours = ?," 
+        + "actual_hours = ?,"
+        + "difficulty = ?,"
+        + "notes = ?,"
+        + "WHERE project_id = ?";
+     //@formatter:on
+     
+     try(Connection conn = DbConnection.getConnection()) {
+       startTransaction(conn);  
+    
+    try(PreparedStatement stmt = conn.prepareStatement(sql)) { 
+      setParameter(stmt, 1, project.getProjectName(), String.class);
+      setParameter(stmt, 2, project.getEstimatedHours(), BigDecimal.class);
+      setParameter(stmt, 3, project.getActualHours(), BigDecimal.class);
+      setParameter(stmt, 4, project.getDifficuly(), Integer.class); 
+      setParameter(stmt, 5, project.getNotes(), String.class);
+      setParameter(stmt, 6, project.getProjectId(), Integer.class); // added in week 11 
+      
+      boolean modfied = stmt.executeUpdate() == 1; 
+      commitTransaction(conn);
+      
+      return modifed; // test here 
+   
+     
+ 
+ }
 } // END PROJECT DAO CLASS 
